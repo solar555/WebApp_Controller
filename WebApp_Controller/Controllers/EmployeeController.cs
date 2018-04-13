@@ -23,11 +23,11 @@ namespace WebApp_Controller.Controllers
     public class EmployeeController : Controller
     {
         [Authorize]
+        [HeaderFooterFilter]
+        [Route("Employee/List")]
         public ActionResult Index()
         {
             EmployeeListViewModel employeeListViewModel = new EmployeeListViewModel();
-            employeeListViewModel.UserName = User.Identity.Name;
-
             EmployeeBusinessLayer empBal = new EmployeeBusinessLayer();
             List<Employee> employees = empBal.GetEmployees();
 
@@ -49,20 +49,20 @@ namespace WebApp_Controller.Controllers
                 empViewModels.Add(empViewModel);
             }
             employeeListViewModel.Employees = empViewModels;
-
-            employeeListViewModel.FooterData = new FooterViewModel();
-            employeeListViewModel.FooterData.CompanyName = "StepByStepSchools";
-            employeeListViewModel.FooterData.Year = DateTime.Now.Year.ToString();
             return View("Index", employeeListViewModel);
         }
 
         [AdminFilter]
+        [HeaderFooterFilter]
         public ActionResult AddNew()
         {
-            return View("CreateEmployee", new CreateEmployeeViewModel());
+            CreateEmployeeViewModel employeeListViewModel = new CreateEmployeeViewModel();
+
+            return View("CreateEmployee", employeeListViewModel);
         }
 
         [AdminFilter]
+        [HeaderFooterFilter]
         public ActionResult SaveEmployee(Employee e, string BtnSubmit)
         {
             switch (BtnSubmit)
@@ -87,6 +87,7 @@ namespace WebApp_Controller.Controllers
                         {
                             vm.Salary = ModelState["Salary"].Value.AttemptedValue;
                         }
+
                         return View("CreateEmployee", vm);
                     }
                 case "Cancel":

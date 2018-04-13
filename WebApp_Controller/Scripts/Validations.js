@@ -61,11 +61,13 @@
             FinalErrorMessage += "\n" + SalaryInValidMessage;
         }
 
-        if (FinalErrorMessage != "Errors:") {
+        if (FinalErrorMessage == "Errors:") {
+            alert("Faild");
             alert(FinalErrorMessage);
-            return false;
+            return true;
         }
         else {
+            alert("Success");
             return true;
         }
     }
